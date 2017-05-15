@@ -20,31 +20,15 @@ public class Player {
 		this.playerName = name;
 	}
 
+	/**
+	 * Increments the player's hand value with the value of the card dealt and pushes the card to the player's hand 
+	 * */
 	public void dealToPlayer(Card cardToDeal) {
-		// Get the rank of the card
-		String rank = cardToDeal.getRank();
-		// Match the rank string with the ranknames string to get it's index
-		// Sort the rankNames for Binary Search
-		java.util.Arrays.sort(Deck.getRankNames());
-		// Search for the index corresponding the current rank
-		int rankIndex = java.util.Arrays.binarySearch(Deck.getRankNames(), rank);
-
-		// Index 0-7 -> numeric values of 2,3,4,5,6,7,8,9
-		if (rankIndex < 8) {
-			totalHandValueAceIsEleven += rankIndex + 2; // Because this is the value of the card
-			totalHandValueAceIsOne += rankIndex + 2; // Because this is the value of the card
-		}
-
-		// Index 8 - 9-10-11 -> numeric values of 10, jumbo, dáma, király
-		else if (rankIndex < 11) {
-			totalHandValueAceIsEleven += 10; // Because this is the value of the card
-			totalHandValueAceIsOne += 10; // Because this is the value of the card
-		}
-		// Index 12 -> numberic value of Ace, which is either 1 or 11
-		else {
-			totalHandValueAceIsEleven += 11; // Because this is the value of the card
-			totalHandValueAceIsOne += 1; // Because this is the value of the card
-		}
+		//Get the card's value
+		int[] cardValue=Game.calculateCardValue(cardToDeal);
+		//Increment the player's total hand accordingly
+		totalHandValueAceIsEleven+=cardValue[0];
+		totalHandValueAceIsOne+=cardValue[1];
 		// Push the card to the player's hand
 		playerHand.push(cardToDeal);
 	}

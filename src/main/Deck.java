@@ -5,7 +5,7 @@ import java.util.Stack;
 
 public class Deck {
 	public static final int ACEINDEX=12; //The index of the "Ace" nam ein the rankNames array
-	enum Suit {
+	public enum Suit {
 		Treff, Kőr, Káró, Pikk
 	}
 

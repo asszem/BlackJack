@@ -31,22 +31,24 @@ public class Game {
 	Player player;
 	Player bank;
 	Deck deck;
-	int deckSize; //temporary variable for junit testing
+	int deckSize; // temporary variable for junit testing
 
 	// Constructs a game object
 	public Game() {
-		this.deck = new Deck(2); //Note: this will be the point for dependency injection
+		this.deck = new Deck(2); // Note: this will be the point for dependency injection
 		deck.shuffleDeck();
 		this.bank = new Player("Bank");
 		this.player = new Player("Player");
-		// Deal 2 cards for Player
+		// Deal 2 cards for Player && calculate hand value
 		dealCard(player, 2);
 		// Deal 2 cards for Bank
-		dealCard(bank, 2); 
-		//Temporary solution: store the deck size at this point for validation
-		deckSize=deck.getDeck().size();
+		dealCard(bank, 2);
+		// Temporary solution: store the deck size at this point for validation
+		deckSize = deck.getDeck().size();
 		// Calculate hand value (method implemented in Player's class)
 		// Display players cards and value
+		displayPlayerHand(this.player);
+		displayPlayerHand(this.bank);
 		// Display first card of Bank value
 		// Get user input
 		// If 'hit'
@@ -59,13 +61,55 @@ public class Game {
 	public void dealCard(Player playerToDeal, int numberToDeal) {
 		for (int i = 0; i < numberToDeal; i++) {
 			// pop the card from the top of the deck and push it to the player's hand
-//			playerToDeal.getPlayerHand().push(this.deck.getDeck().pop());
+			// playerToDeal.getPlayerHand().push(this.deck.getDeck().pop());
+			// the DealToPlayer method also increments the player's hand value
 			playerToDeal.dealToPlayer(this.deck.getDeck().pop());
 		}
 	}
 
+	public void displayPlayerHand(Player playerToDisplay) { // Note - in a later version DI can go here --i guess
+		Stack<Card> currentHand = playerToDisplay.getPlayerHand();
+		int[] handValues = playerToDisplay.getTotalHandValues();
+		System.out.print(playerToDisplay.getPlayerName() + "'s hand value: ");
+		System.out.println(handValues[0] + " / "+handValues[1]);
+		System.out.println("Cards in hand:");
+		for (Card currentCard : currentHand) {
+			System.out.println("\t" + currentCard);
+		}
+		System.out.println("--------------");
+	}
+
 	
-	
+	public static int[] calculateCardValue(Card cardToEvaulateForValue){
+		int returnValue[] = new int[2];
+		// Get the rank of the card
+		String rank = cardToEvaulateForValue.getRank();
+		String[] rankNames = Deck.getRankNames();
+		int rankIndex=0;
+		for (int i = 0; i < rankNames.length; i++) {
+			if (rankNames[i].equalsIgnoreCase(rank)){
+				rankIndex=i;
+				break;
+			}
+		}
+		// Index 0-7 -> numeric values of 2,3,4,5,6,7,8,9
+		if (rankIndex < 8) {
+			returnValue[0]=rankIndex+2;
+			returnValue[1]=rankIndex+2;
+		}
+
+		// Index 8 - 9-10-11 -> numeric values of 10, jumbo, dáma, király
+		else if (rankIndex < 11) {
+			returnValue[0]=10;
+			returnValue[1]=10;
+		}
+		// Index 12 -> numeric value of Ace, which is either 1 or 11
+		else {
+			returnValue[0]=11;
+			returnValue[1]=1;
+		}
+		return returnValue;
+}	
 	
 	public static boolean getKeyboardInput() {
 		return false;
