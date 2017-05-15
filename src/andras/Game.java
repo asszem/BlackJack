@@ -1,4 +1,4 @@
-package main;
+package andras;
 /*
 Requirement: For the adventurous gambler — 
 * use a stack and a Random object in a program to simulate a game of Blackjack 

@@ -8,6 +8,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import andras.Card;
+import andras.Deck;
+import andras.Game;
+
 
 public class GameTest {
 	public static Game testInstance = new Game();
